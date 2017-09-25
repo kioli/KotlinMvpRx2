@@ -14,10 +14,10 @@ internal interface QuoteContract {
     }
 
     interface QuotePresenter : IPresenter<QuoteView> {
-        fun callData()
+        fun getQuote(forceNew: Boolean)
     }
 
     interface QuoteModel {
-        fun callData(): Flowable<Quote>
+        fun fetchQuote(): Flowable<Quote>
     }
 }

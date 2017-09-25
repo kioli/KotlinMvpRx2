@@ -7,7 +7,7 @@ import kioli.rx.entity.Quote
 
 internal class QuoteModel : QuoteContract.QuoteModel {
 
-    override fun callData(): Flowable<Quote> {
+    override fun fetchQuote(): Flowable<Quote> {
         return ServiceGenerator.getService(QuoteApi::class.java).loadQuote()
     }
 }

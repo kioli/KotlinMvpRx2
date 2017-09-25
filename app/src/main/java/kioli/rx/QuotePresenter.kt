@@ -17,12 +17,13 @@ internal class QuotePresenter(private val model: QuoteContract.QuoteModel)
     private val flowableCacheKey = "flowable quote"
     private var disposableQuote: Disposable? = null
 
-    override fun callData() {
+    override fun getQuote(forceNew: Boolean) {
         view?.showLoading()
-        val flowableQuote = FlowableManager.cacheFlowable(flowableCacheKey, model.callData()
+        val flowableQuote = FlowableManager.cacheFlowable(flowableCacheKey, model.fetchQuote()
                 .delay(2, TimeUnit.SECONDS)
                 .subscribeOn(SchedulerProvider.newThread())
-                .observeOn(SchedulerProvider.ui())) as Flowable<Quote>
+                .observeOn(SchedulerProvider.ui()), forceNew) as Flowable<Quote>
+
         disposableQuote = flowableQuote.subscribe(
                 { quote ->
                     view?.hideLoading()
