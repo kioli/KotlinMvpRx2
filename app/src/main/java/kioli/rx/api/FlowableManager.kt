@@ -9,9 +9,7 @@ internal object FlowableManager {
 
     fun cacheFlowable(symbol: String, flowable: Flowable<*>, forceNew: Boolean = false): Flowable<*> {
         if (!forceNew) {
-            cache.get(symbol)?.let {
-                return it
-            }
+            cache.get(symbol)?.let { return it }
         }
 
         /**

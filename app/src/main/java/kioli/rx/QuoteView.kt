@@ -19,6 +19,7 @@ internal class QuoteView @JvmOverloads constructor(context: Context, attrs: Attr
         inflater.inflate(R.layout.view_quote, this, true)
         swipe_to_refresh.setOnRefreshListener {
             swipe_to_refresh.isRefreshing = false
+            swipe_to_refresh.isEnabled = false
             presenter.getQuote(true)
         }
     }
@@ -48,7 +49,8 @@ internal class QuoteView @JvmOverloads constructor(context: Context, attrs: Attr
         loading.visibility = View.GONE
     }
 
-    override fun showQuote(quote: Quote) {
-        text.text = quote.text
+    override fun returnResultQuote(quote: Quote?) {
+        quote?.text.let { text.text = it }
+        swipe_to_refresh.isEnabled = true
     }
 }

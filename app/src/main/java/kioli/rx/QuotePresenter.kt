@@ -17,6 +17,11 @@ internal class QuotePresenter(private val model: QuoteContract.QuoteModel)
     private val flowableCacheKey = "flowable quote"
     private var disposableQuote: Disposable? = null
 
+    override fun detachView() {
+        super.detachView()
+        disposableQuote?.dispose()
+    }
+
     override fun getQuote(forceNew: Boolean) {
         view?.showLoading()
         val flowableQuote = FlowableManager.cacheFlowable(flowableCacheKey, model.fetchQuote()
@@ -26,16 +31,16 @@ internal class QuotePresenter(private val model: QuoteContract.QuoteModel)
 
         disposableQuote = flowableQuote.subscribe(
                 { quote ->
-                    view?.hideLoading()
-                    view?.showQuote(quote)
+                    handleQuoteResult(quote)
                 },
                 { error ->
                     Log.e("Rx2Test", "error getting quote: ${error.localizedMessage}")
+                    handleQuoteResult(null)
                 })
     }
 
-    override fun detachView() {
-        super.detachView()
-        disposableQuote?.dispose()
+    private fun handleQuoteResult(quote: Quote?) {
+        view?.hideLoading()
+        view?.returnResultQuote(quote)
     }
 }
