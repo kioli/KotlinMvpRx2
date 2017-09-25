@@ -1,8 +1,11 @@
 package kioli.rx.mvp
 
+import io.reactivex.disposables.CompositeDisposable
+
 internal open class BasePresenter<T : IView> : IPresenter<T> {
 
     protected var view: T? = null
+    protected val disposables: CompositeDisposable = CompositeDisposable()
 
     private val isViewAttached: Boolean
         get() = view != null
@@ -13,6 +16,7 @@ internal open class BasePresenter<T : IView> : IPresenter<T> {
 
     override fun detachView() {
         view = null
+        disposables.clear()
     }
 
     fun checkViewAttached() {
