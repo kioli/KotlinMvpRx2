@@ -7,7 +7,7 @@ import retrofit2.http.GET
 /**
  * Classic Retrofit2 interface to define network endpoints
  */
-interface QuoteApi {
+internal interface QuoteApi {
 
     @GET("?method=getQuote&format=json&lang=en")
     fun loadQuote(): Flowable<Quote>

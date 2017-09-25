@@ -5,7 +5,7 @@ import kioli.rx.entity.Quote
 import kioli.rx.mvp.IPresenter
 import kioli.rx.mvp.IView
 
-interface QuoteContract {
+internal interface QuoteContract {
 
     interface QuoteView : IView {
         fun showQuote(quote: Quote)

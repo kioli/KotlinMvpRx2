@@ -1,6 +1,6 @@
 package kioli.rx.mvp
 
-interface IPresenter<in V> {
+internal interface IPresenter<in V> {
 
     fun attachView(view: V)
 

@@ -6,7 +6,7 @@ import android.view.View
 import kioli.rx.entity.Quote
 import kotlinx.android.synthetic.main.activity_main.*
 
-class QuoteActivity : AppCompatActivity(), QuoteContract.QuoteView {
+internal class QuoteActivity : AppCompatActivity(), QuoteContract.QuoteView {
 
     private var presenter: QuoteContract.QuotePresenter = QuotePresenter(QuoteModel())
 

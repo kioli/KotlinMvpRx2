@@ -1,6 +1,6 @@
 package kioli.rx.mvp
 
-open class BasePresenter<T : IView> : IPresenter<T> {
+internal open class BasePresenter<T : IView> : IPresenter<T> {
 
     protected var view: T? = null
 

@@ -1,4 +1,3 @@
 package kioli.rx.mvp
 
-interface IView {
-}
+internal interface IView

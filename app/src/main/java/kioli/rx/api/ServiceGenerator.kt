@@ -10,7 +10,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 /**
  * Singleton class to obtain services to make API calls with
  */
-object ServiceGenerator {
+internal object ServiceGenerator {
 
     private val endpoint = "http://api.forismatic.com/api/1.0/"
     private val builder: Retrofit.Builder
