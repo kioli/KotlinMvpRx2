@@ -1,7 +1,10 @@
-package kioli.rx
+package kioli.rx.section
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import kioli.rx.api.FlowableManager
+import kioli.rx.api.SchedulerProvider
+import kioli.rx.api.ServiceGenerator
 import kotlinx.android.synthetic.main.view_quote.view.*
 
 internal class QuoteActivity : AppCompatActivity() {
@@ -11,7 +14,10 @@ internal class QuoteActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        view = QuoteView(this)
+        view = QuoteView(this, QuotePresenter(
+                QuoteModel(ServiceGenerator.ServiceGeneratorWrapper()),
+                FlowableManager.FlowableManagerWrapper(),
+                SchedulerProvider.SchedulerProviderWrapper()))
         setContentView(view)
         savedInstanceState?.getString(retainedQuote)?.let { view.text.text = it }
     }

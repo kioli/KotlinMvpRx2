@@ -1,8 +1,13 @@
 package kioli.rx.mvp
 
 import io.reactivex.disposables.CompositeDisposable
+import kioli.rx.api.FlowableManager
+import kioli.rx.api.SchedulerProvider
 
-internal open class BasePresenter<T : IView> : IPresenter<T> {
+internal open class BasePresenter<T : IView> constructor(
+        protected val flowableManager: FlowableManager.FlowableManagerWrapper,
+        protected val schedulerProvider: SchedulerProvider.SchedulerProviderWrapper)
+    : IPresenter<T> {
 
     protected var view: T? = null
     protected val disposables: CompositeDisposable = CompositeDisposable()

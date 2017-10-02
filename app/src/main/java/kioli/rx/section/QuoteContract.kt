@@ -1,4 +1,4 @@
-package kioli.rx
+package kioli.rx.section
 
 import io.reactivex.Flowable
 import kioli.rx.entity.Quote

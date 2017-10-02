@@ -1,18 +1,23 @@
-package kioli.rx
+package kioli.rx.section
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
-import kioli.rx.QuoteContract.QuoteView
+import kioli.rx.R
 import kioli.rx.entity.Quote
+import kioli.rx.section.QuoteContract.QuoteView
 import kotlinx.android.synthetic.main.view_quote.view.*
 
 internal class QuoteView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null)
     : RelativeLayout(context, attrs), QuoteView {
 
-    private var presenter: QuoteContract.QuotePresenter = QuotePresenter(QuoteModel())
+    constructor(context: Context, presenter: QuoteContract.QuotePresenter) : this(context) {
+        this.presenter = presenter
+    }
+
+    private lateinit var presenter: QuoteContract.QuotePresenter
 
     init {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

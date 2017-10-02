@@ -1,26 +1,28 @@
-package kioli.rx
+package kioli.rx.section
 
 import android.util.Log
 import io.reactivex.Flowable
-import kioli.rx.QuoteContract.QuotePresenter
-import kioli.rx.QuoteContract.QuoteView
+import kioli.rx.section.QuoteContract.QuotePresenter
+import kioli.rx.section.QuoteContract.QuoteView
 import kioli.rx.api.FlowableManager
 import kioli.rx.api.SchedulerProvider
 import kioli.rx.entity.Quote
 import kioli.rx.mvp.BasePresenter
 import java.util.concurrent.TimeUnit
 
-internal class QuotePresenter(private val model: QuoteContract.QuoteModel)
-    : BasePresenter<QuoteView>(), QuotePresenter {
+internal class QuotePresenter(private val model: QuoteContract.QuoteModel,
+                              flowableManager: FlowableManager.FlowableManagerWrapper,
+                              schedulerProvider: SchedulerProvider.SchedulerProviderWrapper)
+    : BasePresenter<QuoteView>(flowableManager, schedulerProvider), QuotePresenter {
 
     private val flowableCacheKey = "flowable quote"
 
     override fun getQuote(forceNew: Boolean) {
         view?.showLoading()
-        val flowableQuote = FlowableManager.cacheFlowable(flowableCacheKey, model.fetchQuote()
+        val flowableQuote = flowableManager.cacheFlowable(flowableCacheKey, model.fetchQuote()
                 .delay(2, TimeUnit.SECONDS)
-                .subscribeOn(SchedulerProvider.newThread())
-                .observeOn(SchedulerProvider.ui()), forceNew) as Flowable<Quote>
+                .subscribeOn(schedulerProvider.newThread())
+                .observeOn(schedulerProvider.ui()), forceNew) as Flowable<Quote>
 
         disposables.add(flowableQuote.subscribe(
                 { quote ->

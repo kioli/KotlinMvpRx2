@@ -5,9 +5,15 @@ import io.reactivex.Flowable
 
 internal object FlowableManager {
 
+    internal class FlowableManagerWrapper {
+        fun cacheFlowable(symbol: String, flowable: Flowable<*>, forceNew: Boolean): Flowable<*> {
+            return FlowableManager.cacheFlowable(symbol, flowable, forceNew)
+        }
+    }
+
     private val cache = LruCache<String, Flowable<*>>(10)
 
-    fun cacheFlowable(symbol: String, flowable: Flowable<*>, forceNew: Boolean = false): Flowable<*> {
+    fun cacheFlowable(symbol: String, flowable: Flowable<*>, forceNew: Boolean): Flowable<*> {
         if (!forceNew) {
             cache.get(symbol)?.let { return it }
         }
