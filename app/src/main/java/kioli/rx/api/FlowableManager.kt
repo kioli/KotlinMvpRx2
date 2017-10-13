@@ -3,17 +3,14 @@ package kioli.rx.api
 import android.support.v4.util.LruCache
 import io.reactivex.Flowable
 
-internal object FlowableManager {
+internal object FlowableManager: FlowableManagerI {
 
-    internal class FlowableManagerWrapper {
-        fun cacheFlowable(symbol: String, flowable: Flowable<*>, forceNew: Boolean): Flowable<*> {
-            return FlowableManager.cacheFlowable(symbol, flowable, forceNew)
-        }
-    }
+    private val mCache = LruCache<String, Flowable<*>>(10)
 
-    private val cache = LruCache<String, Flowable<*>>(10)
+    override val cache: LruCache<String, Flowable<*>>
+        get() = mCache
 
-    fun cacheFlowable(symbol: String, flowable: Flowable<*>, forceNew: Boolean): Flowable<*> {
+    override fun cacheFlowable(symbol: String, flowable: Flowable<*>, forceNew: Boolean): Flowable<*> {
         if (!forceNew) {
             cache.get(symbol)?.let { return it }
         }

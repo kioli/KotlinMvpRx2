@@ -7,17 +7,12 @@ import android.view.View
 import android.widget.RelativeLayout
 import kioli.rx.R
 import kioli.rx.entity.Quote
-import kioli.rx.section.QuoteContract.QuoteView
 import kotlinx.android.synthetic.main.view_quote.view.*
 
 internal class QuoteView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null)
-    : RelativeLayout(context, attrs), QuoteView {
+    : RelativeLayout(context, attrs), QuoteContract.View {
 
-    constructor(context: Context, presenter: QuoteContract.QuotePresenter) : this(context) {
-        this.presenter = presenter
-    }
-
-    private lateinit var presenter: QuoteContract.QuotePresenter
+    override lateinit var presenter: QuoteContract.Presenter
 
     init {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -31,19 +26,7 @@ internal class QuoteView @JvmOverloads constructor(context: Context, attrs: Attr
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        presenter.attachView(this)
-        presenter.getQuote(false)
-    }
-
-    /**
-     * Detach the view to avoid memory leaks and dispose of all subscriptions
-     * to have them refreshed when the new Activity spawns
-     *
-     * Note: When the activity is paused it keeps receiving updates
-     */
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        presenter.detachView()
+        presenter.start()
     }
 
     override fun showLoading() {

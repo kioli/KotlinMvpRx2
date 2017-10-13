@@ -7,13 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-internal object ServiceGenerator {
-
-    internal class ServiceGeneratorWrapper {
-        fun <T> getService(c: Class<T>): T {
-            return ServiceGenerator.getService(c)
-        }
-    }
+internal object ServiceGenerator: ServiceGeneratorI {
 
     private val endpoint = "http://api.forismatic.com/api/1.0/"
     private val builder: Retrofit.Builder
@@ -32,7 +26,7 @@ internal object ServiceGenerator {
         }
     }
 
-    fun <T> getService(c: Class<T>): T {
+    override fun <T> getService(c: Class<T>): T {
         return builder.build().create(c)
     }
 

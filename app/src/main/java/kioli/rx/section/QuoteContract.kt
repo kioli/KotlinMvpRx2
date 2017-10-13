@@ -2,12 +2,11 @@ package kioli.rx.section
 
 import io.reactivex.Flowable
 import kioli.rx.entity.Quote
-import kioli.rx.mvp.IPresenter
-import kioli.rx.mvp.IView
+import kioli.rx.mvp.ViewI
 
 internal interface QuoteContract {
 
-    interface QuoteView : IView {
+    interface View : ViewI<Presenter> {
         /**
          * Return the result of asking for a quote to the calling QuoteView
          *
@@ -26,7 +25,7 @@ internal interface QuoteContract {
         fun hideLoading()
     }
 
-    interface QuotePresenter : IPresenter<QuoteView> {
+    interface Presenter : kioli.rx.mvp.PresenterI {
         /**
          * Get a quote to present to the QuoteView
          *
@@ -35,7 +34,7 @@ internal interface QuoteContract {
         fun getQuote(forceNew: Boolean)
     }
 
-    interface QuoteModel {
+    interface Model {
         /**
          * Retrieve a quote wrapping it in a reactive flowable
          *

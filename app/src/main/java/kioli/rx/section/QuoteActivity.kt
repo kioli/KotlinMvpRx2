@@ -14,12 +14,16 @@ internal class QuoteActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        view = QuoteView(this, QuotePresenter(
-                QuoteModel(ServiceGenerator.ServiceGeneratorWrapper()),
-                FlowableManager.FlowableManagerWrapper(),
-                SchedulerProvider.SchedulerProviderWrapper()))
-        setContentView(view)
+        view = QuoteView(this)
         savedInstanceState?.getString(retainedQuote)?.let { view.text.text = it }
+
+        QuotePresenter(
+                QuoteModel(ServiceGenerator),
+                view,
+                FlowableManager,
+                SchedulerProvider)
+
+        setContentView(view)
     }
 
     /**

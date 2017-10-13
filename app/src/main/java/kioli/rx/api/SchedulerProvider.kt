@@ -7,31 +7,19 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Utility class to acquire different schedulers used to perform Rx operations
  */
-internal object SchedulerProvider {
+internal object SchedulerProvider: SchedulerProviderI {
 
-    internal class SchedulerProviderWrapper {
-        fun ui(): Scheduler = SchedulerProvider.ui()
+    override fun ui(): Scheduler = AndroidSchedulers.mainThread()
 
-        fun computation(): Scheduler = SchedulerProvider.computation()
+    override fun computation(): Scheduler = Schedulers.computation()
 
-        fun trampoline(): Scheduler = SchedulerProvider.trampoline()
+    override fun trampoline(): Scheduler = Schedulers.trampoline()
 
-        fun newThread(): Scheduler = SchedulerProvider.newThread()
+    override fun newThread(): Scheduler = Schedulers.newThread()
 
-        fun io(): Scheduler = SchedulerProvider.io()
+    override fun io(): Scheduler = Schedulers.io()
 
-        fun <T> getService(c: Class<T>): T {
-            return ServiceGenerator.getService(c)
-        }
+    override fun <T> getService(c: Class<T>): T {
+        return ServiceGenerator.getService(c)
     }
-
-    fun ui(): Scheduler = AndroidSchedulers.mainThread()
-
-    fun computation(): Scheduler = Schedulers.computation()
-
-    fun trampoline(): Scheduler = Schedulers.trampoline()
-
-    fun newThread(): Scheduler = Schedulers.newThread()
-
-    fun io(): Scheduler = Schedulers.io()
 }

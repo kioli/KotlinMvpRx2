@@ -5,14 +5,12 @@ import io.reactivex.schedulers.TestScheduler
 import kioli.rx.api.FlowableManager
 import kioli.rx.api.SchedulerProvider
 import kioli.rx.entity.Quote
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.*
-import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
 import java.util.concurrent.Callable
 import java.util.concurrent.TimeUnit
@@ -23,7 +21,7 @@ class QuotePresenterTest {
     @Mock
     private lateinit var mockView: QuoteContract.QuoteView
     @Mock
-    private lateinit var mockModel: QuoteContract.QuoteModel
+    private lateinit var mockModel: QuoteContract.Model
     @Mock
     private lateinit var mockManager: FlowableManager.FlowableManagerWrapper
     @Mock
