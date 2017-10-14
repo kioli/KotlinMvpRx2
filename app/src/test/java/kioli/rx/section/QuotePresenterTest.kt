@@ -2,8 +2,9 @@ package kioli.rx.section
 
 import io.reactivex.Flowable
 import io.reactivex.schedulers.TestScheduler
-import kioli.rx.api.FlowableManager
-import kioli.rx.api.SchedulerProvider
+import kioli.rx.anything
+import kioli.rx.api.FlowableManagerI
+import kioli.rx.api.SchedulerProviderI
 import kioli.rx.entity.Quote
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -13,80 +14,60 @@ import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnitRunner
 import java.util.concurrent.Callable
-import java.util.concurrent.TimeUnit
 
+@Suppress("IllegalIdentifier")
 @RunWith(MockitoJUnitRunner::class)
 class QuotePresenterTest {
 
     @Mock
-    private lateinit var mockView: QuoteContract.QuoteView
+    private lateinit var mockView: QuoteContract.View
     @Mock
     private lateinit var mockModel: QuoteContract.Model
     @Mock
-    private lateinit var mockManager: FlowableManager.FlowableManagerWrapper
+    private lateinit var mockManager: FlowableManagerI
     @Mock
-    private lateinit var mockSchedulerProvider: SchedulerProvider.SchedulerProviderWrapper
+    private lateinit var mockSchedulerProvider: SchedulerProviderI
 
     @Test
-    fun getQuote_returnsCorrectResult() {
+    fun `get quote with successful flowable handles result`() {
         // 1. Prepare
-        val quotePresenter = QuotePresenter(mockModel, mockManager, mockSchedulerProvider)
-        quotePresenter.attachView(mockView)
-
+        val quotePresenter = QuotePresenter(mockModel, mockView, mockManager, mockSchedulerProvider)
         val stubQuote = Quote("Lao Tsu", "One fish is better than no fish at all")
         val mockFlowable = spy(Flowable.just(stubQuote))
-        val mockDelayedFlowable = spy(mockFlowable)
-        val mockSubscribedOnFlowable = spy(mockDelayedFlowable)
-        val mockObservedOnFlowable = spy(mockSubscribedOnFlowable)
-        val mockCachedFlowable = spy(mockObservedOnFlowable)
-
         val stubScheduler = TestScheduler()
+
         `when`(mockSchedulerProvider.newThread()).thenReturn(stubScheduler)
         `when`(mockSchedulerProvider.ui()).thenReturn(stubScheduler)
-
         `when`(mockModel.fetchQuote()).thenReturn(mockFlowable)
-        `when`(mockFlowable.delay(2, TimeUnit.SECONDS)).thenReturn(mockDelayedFlowable)
-        `when`(mockDelayedFlowable.subscribeOn(stubScheduler)).thenReturn(mockSubscribedOnFlowable)
-        `when`(mockSubscribedOnFlowable.observeOn(stubScheduler)).thenReturn(mockObservedOnFlowable)
-        `when`(mockManager.cacheFlowable(anyString(), kioli.rx.any<Flowable<*>>(), anyBoolean())).thenReturn(mockCachedFlowable)
+        `when`(mockManager.cacheFlowable(anyString(), anything(), anyBoolean())).thenReturn(mockFlowable)
 
         // 2. Execute
         quotePresenter.getQuote(false)
 
         // 3. Verify
-        Mockito.verify(mockView, Mockito.times(1)).showLoading()
-        Mockito.verify(mockView, Mockito.times(1)).hideLoading()
-        Mockito.verify(mockView, Mockito.times(1)).returnResultQuote(stubQuote)
+        verify(mockView, Mockito.times(1)).showLoading()
+        verify(mockView, Mockito.times(1)).hideLoading()
+        verify(mockView, Mockito.times(1)).returnResultQuote(stubQuote)
     }
 
     @Test
-    fun getQuote_returnsErrorResult() {
+    fun `get quote with failing flowable handles null`() {
         // 1. Prepare
-        val quotePresenter = QuotePresenter(mockModel, mockManager, mockSchedulerProvider)
-        quotePresenter.attachView(mockView)
-
+        val quotePresenter = QuotePresenter(mockModel, mockView, mockManager, mockSchedulerProvider)
         val mockFlowable = spy(Flowable.fromCallable(Callable {throw NullPointerException(":(")} as Callable<Quote>))
-        val mockDelayedFlowable = spy(mockFlowable)
-        val mockSubscribedOnFlowable = spy(mockDelayedFlowable)
-        val mockObservedOnFlowable = spy(mockSubscribedOnFlowable)
-        val mockCachedFlowable = spy(mockObservedOnFlowable)
-
         val stubScheduler = TestScheduler()
+
         `when`(mockSchedulerProvider.newThread()).thenReturn(stubScheduler)
         `when`(mockSchedulerProvider.ui()).thenReturn(stubScheduler)
-
         `when`(mockModel.fetchQuote()).thenReturn(mockFlowable)
-        `when`(mockFlowable.delay(2, TimeUnit.SECONDS)).thenReturn(mockDelayedFlowable)
-        `when`(mockDelayedFlowable.subscribeOn(stubScheduler)).thenReturn(mockSubscribedOnFlowable)
-        `when`(mockSubscribedOnFlowable.observeOn(stubScheduler)).thenReturn(mockObservedOnFlowable)
-        `when`(mockManager.cacheFlowable(anyString(), kioli.rx.any(), anyBoolean())).thenReturn(mockCachedFlowable)
+        `when`(mockManager.cacheFlowable(anyString(), anything(), anyBoolean())).thenReturn(mockFlowable)
 
         // 2. Execute
         quotePresenter.getQuote(false)
 
         // 3. Verify
-        Mockito.verify(mockView, Mockito.times(1)).showLoading()
-        Mockito.verify(mockView, Mockito.times(1)).hideLoading()
-        Mockito.verify(mockView, Mockito.times(1)).returnResultQuote(null)
+        verify(mockView, Mockito.times(1)).showLoading()
+        verify(mockView, Mockito.times(1)).hideLoading()
+        verify(mockView, Mockito.times(1)).returnResultQuote(null)
     }
 }

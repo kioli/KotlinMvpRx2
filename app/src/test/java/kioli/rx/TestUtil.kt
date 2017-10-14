@@ -2,7 +2,7 @@ package kioli.rx
 
 import org.mockito.Mockito
 
-fun <T> any(): T {
+fun <T> anything(): T {
     Mockito.any<T>()
     return uninitialized()
 }

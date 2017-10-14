@@ -31,8 +31,6 @@ internal class QuotePresenter(private val model: QuoteContract.Model,
                 .delay(1, TimeUnit.SECONDS)
                 .subscribeOn(schedulerProvider.newThread())
                 .observeOn(schedulerProvider.ui()), forceNew) as Flowable<Quote>
-
-        disposables.size()
         disposables.add(flowableQuote.subscribe(
                 { quote ->
                     handleQuoteResult(quote)
