@@ -7,6 +7,7 @@ import kioli.rx.api.SchedulerProviderI
 import kioli.rx.entity.Quote
 import kioli.rx.mvp.BasePresenter
 import kioli.rx.section.QuoteContract.Presenter
+import kioli.rx.util.EspressoIdlingResource
 import java.util.concurrent.TimeUnit
 
 internal class QuotePresenter(private val model: QuoteContract.Model,
@@ -31,6 +32,9 @@ internal class QuotePresenter(private val model: QuoteContract.Model,
                 .delay(1, TimeUnit.SECONDS)
                 .subscribeOn(schedulerProvider.newThread())
                 .observeOn(schedulerProvider.ui()), forceNew) as Flowable<Quote>
+
+        // Make sure Espresso knows that the app is busy until the response is handled.
+        EspressoIdlingResource.increment()
         disposables.add(flowableQuote.subscribe(
                 { quote ->
                     handleQuoteResult(quote)
@@ -42,6 +46,11 @@ internal class QuotePresenter(private val model: QuoteContract.Model,
     }
 
     private fun handleQuoteResult(quote: Quote?) {
+        // This callback may be called twice, once for the cache and once for loading
+        // the data from the server API, so we check before decrementing
+        if (!EspressoIdlingResource.countingIdlingResource.isIdleNow) {
+            EspressoIdlingResource.decrement()
+        }
         view.hideLoading()
         view.returnResultQuote(quote)
     }
