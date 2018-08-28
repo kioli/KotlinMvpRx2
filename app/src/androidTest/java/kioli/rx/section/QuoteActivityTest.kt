@@ -7,7 +7,7 @@ import android.support.test.filters.LargeTest
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import kioli.rx.R
-import org.hamcrest.Matchers.not
+import kioli.rx.section.mvp.QuoteActivity
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
