@@ -18,7 +18,7 @@ internal class QuoteRepository(
         return when (policy) {
             NetworkFirst -> networkDataSource.getQuote().fold(
                     {
-                        Log.w("RxKioli", "error loading quote from network: $it")
+                        Log.w("QuoteKioli", "error loading quote from network: $it")
                         localDataSource.getQuote()
                     },
                     {
@@ -27,7 +27,7 @@ internal class QuoteRepository(
                     })
             LocalFirst -> localDataSource.getQuote().fold(
                     {
-                        Log.w("RxKioli", "error loading quote from local cache: $it")
+                        Log.w("QuoteKioli", "error loading quote from local cache: $it")
                         networkDataSource.getQuote().map {
                             localDataSource.saveQuote(it)
                             it

@@ -3,6 +3,7 @@ package kioli.rx.common.di
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import kioli.rx.BuildConfig
 import kioli.rx.common.api.QuoteApi
@@ -18,6 +19,8 @@ import kioli.rx.section.mvp.QuotePresenter
 import kioli.rx.section.repository.QuoteLocalDataSource
 import kioli.rx.section.repository.QuoteNetworkDataSource
 import kioli.rx.section.repository.QuoteRepository
+import kotlinx.coroutines.experimental.CoroutineDispatcher
+import kotlinx.coroutines.experimental.asCoroutineDispatcher
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -31,7 +34,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 fun appModule(appContext: Context) = Kodein.Module {
     bind<Context>() with provider { appContext }
-    bind<Invoker>() with singleton { UseCaseInvoker() }
+    bind<CoroutineDispatcher>() with provider { AsyncTask.THREAD_POOL_EXECUTOR.asCoroutineDispatcher() }
+    bind<Invoker>() with singleton { UseCaseInvoker(instance()) }
     bind<NetworkDataSource>() with singleton { QuoteNetworkDataSource(instance()) }
     bind<LocalDataSource>() with singleton { QuoteLocalDataSource(instance()) }
     bind<SharedPreferences>() with singleton { appContext.getSharedPreferences("quotePreferences", MODE_PRIVATE) }

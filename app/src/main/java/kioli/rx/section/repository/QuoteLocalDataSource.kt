@@ -17,7 +17,7 @@ internal class QuoteLocalDataSource(private val pref: SharedPreferences) : Local
         pref.getString(quoteKey, null)?.let {
             return Quote(text = it).right()
         }
-        Log.e("RxKioli", "Quote nt found in the local cache")
+        Log.e("QuoteKioli", "Quote nt found in the local cache")
         return QuoteNotFound().left()
     }
 
