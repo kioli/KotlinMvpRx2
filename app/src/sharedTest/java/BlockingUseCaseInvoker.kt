@@ -1,9 +1,9 @@
-package kioli.rx
+package kioli.quote
 
-import kioli.rx.common.error.Error
-import kioli.rx.common.functional.Either
-import kioli.rx.common.interactor.Invoker
-import kioli.rx.common.interactor.UseCase
+import kioli.quote.common.error.Error
+import kioli.quote.common.functional.Either
+import kioli.quote.common.interactor.Invoker
+import kioli.quote.common.interactor.UseCase
 import kotlinx.coroutines.experimental.runBlocking
 
 /**

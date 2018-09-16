@@ -6,7 +6,7 @@ android {
     compileSdkVersion 28
     buildToolsVersion "27.0.3"
     defaultConfig {
-        applicationId "kioli.rx"
+        applicationId "kioli.quote"
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 1

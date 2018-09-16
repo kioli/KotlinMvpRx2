@@ -1,4 +1,4 @@
-package kioli.rx
+package kioli.quote
 
 import org.mockito.Mockito
 
